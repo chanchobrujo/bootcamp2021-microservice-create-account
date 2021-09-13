@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: microservices-accounts
+  profiles:
+    active: dev
+  cloud:
+    config:
+      uri: http://localhost:9510
+
+server:
+  port: 9592
