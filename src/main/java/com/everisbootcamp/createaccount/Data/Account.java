@@ -24,12 +24,7 @@ public class Account {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime datecreated = LocalDateTime.now(ZoneId.of("America/Lima"));
 
-    private String numberaccount = Consumer.webClientLogic
-        .get()
-        .uri("/generatednumber/12")
-        .retrieve()
-        .bodyToMono(String.class)
-        .block();
+    private String numberaccount = Consumer.webClientLogic.get().uri("/generatednumber/12").retrieve().bodyToMono(String.class).block();
 
     private String idcustomer;
     private String typeaccount;

@@ -9,9 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountModel {
-
-    private String idcustomer;
-    private String typeaccount;
-    private Double amount;
+public class AccountModel { 
+    private String typeaccount; 
 }
