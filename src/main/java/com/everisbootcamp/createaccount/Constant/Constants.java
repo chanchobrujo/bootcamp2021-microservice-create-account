@@ -1,4 +1,4 @@
-package com.everisbootcamp.createaccount.Constant;
+package com.everisbootcamp.createaccount.Constant; 
 
 public enum Constants {
     ;
@@ -18,9 +18,10 @@ public enum Constants {
             .concat(GATEWAY)
             .concat(SERVER_PATH)
             .concat("/logic");
+        
         public static final String CUSTOMERS_PATH = HTTP_CONSTANT
             .concat(GATEWAY)
             .concat(MS_PATH)
-            .concat("/customers");
+            .concat("/customer"); 
     }
 }
