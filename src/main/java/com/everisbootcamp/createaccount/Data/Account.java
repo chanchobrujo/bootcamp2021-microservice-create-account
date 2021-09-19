@@ -3,13 +3,13 @@ package com.everisbootcamp.createaccount.Data;
 import com.everisbootcamp.createaccount.Web.Consumer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
-import java.time.ZoneId; 
+import java.time.ZoneId;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document; 
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter

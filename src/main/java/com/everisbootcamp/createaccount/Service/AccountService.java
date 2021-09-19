@@ -1,15 +1,14 @@
-package com.everisbootcamp.createaccount.Service; 
+package com.everisbootcamp.createaccount.Service;
+
 import com.everisbootcamp.createaccount.Model.CustomerModel;
 import com.everisbootcamp.createaccount.Model.Response;
 import com.everisbootcamp.createaccount.Web.Consumer;
-
-import java.util.Map; 
+import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -17,25 +16,23 @@ import reactor.core.publisher.Mono;
 public class AccountService {
 
     //@Autowired
-    //private AccounRepository repository; 
+    //private AccounRepository repository;
 
-    private ResponseEntity<CustomerModel> findById(){                          
-        return Consumer
-            .webClientCustomer
+    private ResponseEntity<CustomerModel> findById() {
+        return Consumer.webClientCustomer
             .get()
-            .uri("/61378daca5a222750f6658b4d" )
-            .retrieve()  
-            .onStatus( status -> status.value() == 404 , clientResponse -> Mono.empty() )
+            .uri("/61378daca5a222750f6658b4d")
+            .retrieve()
+            .onStatus(status -> status.value() == 404, clientResponse -> Mono.empty())
             .toEntity(CustomerModel.class)
             .block();
-    }                           
+    }
 
-    public String find(){
-        if (findById().getBody()==null) 
-            log.info(" +++ " + "no hay nada mi king color kong." );
-        else 
-            log.info(" --- " + "GAAAAAAA." );
-            
+    public String find() {
+        if (findById().getBody() == null) log.info(
+            " +++ " + "no hay nada mi king color kong."
+        ); else log.info(" --- " + "GAAAAAAA.");
+
         return "-";
     }
 
