@@ -31,6 +31,8 @@ public class Account {
     private String profile;
     private Double amount;
 
+    private Rules rules;
+
     public Account(String idcustomer, String typeaccount, String profile, Double amount) {
         this.idcustomer = idcustomer;
         this.typeaccount = typeaccount;
