@@ -79,7 +79,7 @@ public class AccountService {
                     Account account = new Account(idcustomer, model.getTypeaccount(), null, 0.0);
 
                     account.setRules(
-                        rulesService.addRule(typecustomer, model.getTypeaccount(), account.getProfile(), model.getMaximumLimitMonthlyMovementsQuantity())
+                        rulesService.addRule(typecustomer, account.getTypeaccount(), account.getProfile(), model.getMaximumLimitMonthlyMovementsQuantity())
                     );
                     repository.save(account).subscribe();
 

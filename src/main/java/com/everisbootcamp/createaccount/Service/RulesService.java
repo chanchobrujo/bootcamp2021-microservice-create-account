@@ -10,10 +10,12 @@ public class RulesService {
         boolean commissionMaintenance = false, maximumLimitMonthlyMovements = false;
 
         if (accountType.equals("Cuenta de ahorro")) maximumLimitMonthlyMovements = true;
-        if (accountType.equals("Cuenta corriente")) commissionMaintenance = true; else {
+        if (accountType.equals("Cuenta corriente")) commissionMaintenance = true; 
+        if (accountType.equals("Cuenta plazo fijo")) {
             maximumLimitMonthlyMovements = true;
             maximumLimitMonthlyMovementsQuantity = 1;
         }
+        
 
         return new Rules(customerType, commissionMaintenance, maximumLimitMonthlyMovements, maximumLimitMonthlyMovementsQuantity);
     }
