@@ -15,6 +15,8 @@ public enum Constants {
 
         public static final String CLIENT_NOT_FOUND = "Cliente no econtrado.";
         public static final String CLIENT_DELETED_SUCCESS = "Datos eliminados correctamente.";
+
+        public static final String CLIENT_ACCOUNT_DENIED = "Usted ya no puede tener mas cuentas de este tipo.";
     }
 
     public static class Path {
@@ -32,7 +34,7 @@ public enum Constants {
 
         public static final String CUSTOMERS_PATH = HTTP_CONSTANT.concat(GATEWAY).concat(MS_PATH).concat("/customer");
     }
-    
+
     public static List<String> TYPE_ACCOUNT = Arrays.asList("Cuenta plazo fijo", "Cuenta de ahorro", "Cuenta corriente");
     public static List<String> PROFILE = Arrays.asList("VIP", "PYME");
 }

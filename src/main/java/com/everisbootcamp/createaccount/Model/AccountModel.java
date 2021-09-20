@@ -1,7 +1,6 @@
 package com.everisbootcamp.createaccount.Model;
 
 import javax.validation.constraints.NotBlank;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +10,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountModel { 
+public class AccountModel {
+
     @NotBlank(message = "El campo tipo de cuenta no debe estar vacio.")
-    private String typeaccount; 
+    private String typeaccount;
+
+    @NotBlank(message = "El campo limite de movimientos mensuales no debe estar vacio.")
+    private int maximumLimitMonthlyMovementsQuantity;
 }
