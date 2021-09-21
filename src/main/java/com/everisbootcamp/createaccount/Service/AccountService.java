@@ -26,12 +26,6 @@ public class AccountService {
     @Autowired
     private RulesService rulesService;
 
-    public Mono<ResponseEntity<Map<String, Object>>> BindingResultErrors(BindingResult bindinResult) {
-        Response response = new Response(bindinResult.getAllErrors().stream().findFirst().get().getDefaultMessage().toString(), HttpStatus.NOT_ACCEPTABLE);
-
-        return Mono.just(ResponseEntity.internalServerError().body(response.getResponse()));
-    }
-
     private ResponseEntity<CustomerModel> findCustomerById(String idcustomer) {
         return Consumer.webClientCustomer
             .get()
@@ -51,6 +45,12 @@ public class AccountService {
             .filter(a -> a.getIdcustomer().equals(idcustomer))
             .filter(aa -> aa.getTypeaccount().equals(typeaccount))
             .count();
+    }
+
+    public Mono<ResponseEntity<Map<String, Object>>> BindingResultErrors(BindingResult bindinResult) {
+        Response response = new Response(bindinResult.getAllErrors().stream().findFirst().get().getDefaultMessage().toString(), HttpStatus.NOT_ACCEPTABLE);
+
+        return Mono.just(ResponseEntity.internalServerError().body(response.getResponse()));
     }
 
     private Boolean filterCreatedAccountByTypeCustomer(String idcustomer, String typecustomer, String typeaccount) {
@@ -91,7 +91,11 @@ public class AccountService {
 
         return Mono.just(new Response(message, status));
     }
-
+    
+    public Mono<Account> findByNumber(String number) {
+        return Mono.just( repository.findAll().toStream().filter(a->a.getNumberaccount().equals(number)).findFirst().get() );
+    }
+    
     public Flux<Account> findAll() {
         return repository.findAll();
     }

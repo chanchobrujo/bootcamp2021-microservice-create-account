@@ -29,6 +29,13 @@ public class AccountController {
         return Mono.just(ResponseEntity.ok().body(service.findAll()));
     }
 
+    @GetMapping("/{number}")
+    public Mono<ResponseEntity< Account >> findByNumber(@PathVariable("number") String number) {
+        return service.findByNumber(number).map(
+        			mapper->ResponseEntity.ok().body(mapper)
+        		).defaultIfEmpty(ResponseEntity.notFound().build() );
+    }
+
     @PostMapping("/save/{id}")
     public Mono<ResponseEntity<Map<String, Object>>> save(@PathVariable("id") String id, @RequestBody @Valid AccountModel model, BindingResult bindinResult) {
         if (bindinResult.hasErrors()) return service.BindingResultErrors(bindinResult);
