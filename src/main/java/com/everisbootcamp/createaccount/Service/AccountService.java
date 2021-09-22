@@ -48,7 +48,10 @@ public class AccountService {
     }
 
     public Mono<ResponseEntity<Map<String, Object>>> BindingResultErrors(BindingResult bindinResult) {
-        Response response = new Response(bindinResult.getAllErrors().stream().findFirst().get().getDefaultMessage().toString(), HttpStatus.NOT_ACCEPTABLE);
+        Response response = new Response(
+            bindinResult.getAllErrors().stream().findFirst().get().getDefaultMessage().toString(),
+            HttpStatus.NOT_ACCEPTABLE
+        );
 
         return Mono.just(ResponseEntity.internalServerError().body(response.getResponse()));
     }
@@ -57,7 +60,9 @@ public class AccountService {
         Boolean filter = false;
 
         if (typecustomer.equals("Personal")) if (accountByTypeCustomer(idcustomer, typeaccount) == 1) filter = true;
-        if (typecustomer.equals("Empresarial")) if (typeaccount.equals("Cuenta de ahorro") || typeaccount.equals("Cuenta corriente")) filter = true;
+        if (typecustomer.equals("Empresarial")) if (
+            typeaccount.equals("Cuenta de ahorro") || typeaccount.equals("Cuenta corriente")
+        ) filter = true;
 
         return filter;
     }
@@ -67,7 +72,13 @@ public class AccountService {
         String message = Constants.Messages.CLIENT_NOT_FOUND;
 
         if (!(findCustomerById(idcustomer).getBody() == null)) {
-            if (Constants.TYPE_ACCOUNT.stream().filter(p -> p.equals(model.getTypeaccount())).collect(Collectors.toList()).isEmpty()) {
+            if (
+                Constants.TYPE_ACCOUNT
+                    .stream()
+                    .filter(p -> p.equals(model.getTypeaccount()))
+                    .collect(Collectors.toList())
+                    .isEmpty()
+            ) {
                 status = HttpStatus.NOT_ACCEPTABLE;
                 message = Constants.Messages.INVALID_DATA;
             } else {
@@ -79,7 +90,12 @@ public class AccountService {
                     Account account = new Account(idcustomer, model.getTypeaccount(), null, 0.0);
 
                     account.setRules(
-                        rulesService.addRule(typecustomer, account.getTypeaccount(), account.getProfile(), model.getMaximumLimitMonthlyMovementsQuantity())
+                        rulesService.addRule(
+                            typecustomer,
+                            account.getTypeaccount(),
+                            account.getProfile(),
+                            model.getMaximumLimitMonthlyMovementsQuantity()
+                        )
                     );
                     repository.save(account).subscribe();
 
@@ -91,11 +107,11 @@ public class AccountService {
 
         return Mono.just(new Response(message, status));
     }
-    
+
     public Mono<Account> findByNumber(String number) {
-        return Mono.just( repository.findAll().toStream().filter(a->a.getNumberaccount().equals(number)).findFirst().get() );
+        return repository.findByNumberaccount(number);
     }
-    
+
     public Flux<Account> findAll() {
         return repository.findAll();
     }

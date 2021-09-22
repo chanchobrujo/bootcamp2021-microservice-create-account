@@ -13,6 +13,7 @@ import lombok.Setter;
 public class AccountModel {
 
     @NotBlank(message = "El campo tipo de cuenta no debe estar vacio.")
-    private String typeaccount; 
+    private String typeaccount;
+
     private int maximumLimitMonthlyMovementsQuantity;
 }
