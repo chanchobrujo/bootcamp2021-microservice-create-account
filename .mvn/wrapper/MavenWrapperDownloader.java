@@ -35,7 +35,8 @@ public class MavenWrapperDownloader {
      * Path to the maven-wrapper.properties file, which might contain a downloadUrl property to
      * use instead of the default one.
      */
-    private static final String MAVEN_WRAPPER_PROPERTIES_PATH = ".mvn/wrapper/maven-wrapper.properties";
+    private static final String MAVEN_WRAPPER_PROPERTIES_PATH =
+        ".mvn/wrapper/maven-wrapper.properties";
 
     /**
      * Path where the maven-wrapper.jar will be saved to.
@@ -81,7 +82,9 @@ public class MavenWrapperDownloader {
         if (!outputFile.getParentFile().exists()) {
             if (!outputFile.getParentFile().mkdirs()) {
                 System.out.println(
-                    "- ERROR creating output directory '" + outputFile.getParentFile().getAbsolutePath() + "'"
+                    "- ERROR creating output directory '" +
+                    outputFile.getParentFile().getAbsolutePath() +
+                    "'"
                 );
             }
         }

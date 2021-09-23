@@ -6,6 +6,7 @@ import com.everisbootcamp.createaccount.Interface.AccounRepository;
 import com.everisbootcamp.createaccount.Model.AccountModel;
 import com.everisbootcamp.createaccount.Model.CustomerModel;
 import com.everisbootcamp.createaccount.Model.Response;
+import com.everisbootcamp.createaccount.Model.updateBalanceModel;
 import com.everisbootcamp.createaccount.Web.Consumer;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -47,7 +48,9 @@ public class AccountService {
             .count();
     }
 
-    public Mono<ResponseEntity<Map<String, Object>>> BindingResultErrors(BindingResult bindinResult) {
+    public Mono<ResponseEntity<Map<String, Object>>> BindingResultErrors(
+        BindingResult bindinResult
+    ) {
         Response response = new Response(
             bindinResult.getAllErrors().stream().findFirst().get().getDefaultMessage().toString(),
             HttpStatus.NOT_ACCEPTABLE
@@ -56,10 +59,16 @@ public class AccountService {
         return Mono.just(ResponseEntity.internalServerError().body(response.getResponse()));
     }
 
-    private Boolean filterCreatedAccountByTypeCustomer(String idcustomer, String typecustomer, String typeaccount) {
+    private Boolean filterCreatedAccountByTypeCustomer(
+        String idcustomer,
+        String typecustomer,
+        String typeaccount
+    ) {
         Boolean filter = false;
 
-        if (typecustomer.equals("Personal")) if (accountByTypeCustomer(idcustomer, typeaccount) == 1) filter = true;
+        if (typecustomer.equals("Personal")) if (
+            accountByTypeCustomer(idcustomer, typeaccount) == 1
+        ) filter = true;
         if (typecustomer.equals("Empresarial")) if (
             typeaccount.equals("Cuenta de ahorro") || typeaccount.equals("Cuenta corriente")
         ) filter = true;
@@ -84,7 +93,13 @@ public class AccountService {
             } else {
                 String typecustomer = findCustomerById(idcustomer).getBody().getTypecustomer();
 
-                if (filterCreatedAccountByTypeCustomer(idcustomer, typecustomer, model.getTypeaccount())) {
+                if (
+                    filterCreatedAccountByTypeCustomer(
+                        idcustomer,
+                        typecustomer,
+                        model.getTypeaccount()
+                    )
+                ) {
                     message = Constants.Messages.CLIENT_ACCOUNT_DENIED;
                 } else {
                     Account account = new Account(idcustomer, model.getTypeaccount(), null, 0.0);
@@ -103,6 +118,29 @@ public class AccountService {
                     message = Constants.Messages.CORRECT_DATA;
                 }
             }
+        }
+
+        return Mono.just(new Response(message, status));
+    }
+
+    public Mono<Response> updateBalance(updateBalanceModel model) {
+        HttpStatus status = HttpStatus.CREATED;
+        String message = Constants.Messages.CORRECT_DATA;
+
+        try {
+            Account account = repository
+                .findByNumberaccount(model.getNumberaccount())
+                .map(
+                    mapper -> {
+                        mapper.setAmount(model.getBalance());
+                        return mapper;
+                    }
+                )
+                .block();
+            repository.save(account).subscribe();
+        } catch (Exception e) {
+            status = HttpStatus.NOT_ACCEPTABLE;
+            message = Constants.Messages.INVALID_DATA;
         }
 
         return Mono.just(new Response(message, status));

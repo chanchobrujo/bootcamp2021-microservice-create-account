@@ -16,7 +16,8 @@ public enum Constants {
         public static final String CLIENT_NOT_FOUND = "Cliente no econtrado.";
         public static final String CLIENT_DELETED_SUCCESS = "Datos eliminados correctamente.";
 
-        public static final String CLIENT_ACCOUNT_DENIED = "Usted ya no puede tener mas cuentas de este tipo.";
+        public static final String CLIENT_ACCOUNT_DENIED =
+            "Usted ya no puede tener mas cuentas de este tipo.";
     }
 
     public static class Path {
@@ -30,9 +31,15 @@ public enum Constants {
         private static final String HTTP_CONSTANT = "http://";
         private static final String GATEWAY = IPR.concat(":").concat(PORT);
 
-        public static final String LOGIC_PATH = HTTP_CONSTANT.concat(GATEWAY).concat(SERVER_PATH).concat("/logic");
+        public static final String LOGIC_PATH = HTTP_CONSTANT
+            .concat(GATEWAY)
+            .concat(SERVER_PATH)
+            .concat("/logic");
 
-        public static final String CUSTOMERS_PATH = HTTP_CONSTANT.concat(GATEWAY).concat(MS_PATH).concat("/customer");
+        public static final String CUSTOMERS_PATH = HTTP_CONSTANT
+            .concat(GATEWAY)
+            .concat(MS_PATH)
+            .concat("/customer");
     }
 
     public static List<String> TYPE_ACCOUNT = Arrays.asList(

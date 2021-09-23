@@ -2,6 +2,7 @@ package com.everisbootcamp.createaccount.Controller;
 
 import com.everisbootcamp.createaccount.Data.Account;
 import com.everisbootcamp.createaccount.Model.AccountModel;
+import com.everisbootcamp.createaccount.Model.updateBalanceModel;
 import com.everisbootcamp.createaccount.Service.AccountService;
 import java.util.Map;
 import javax.validation.Valid;
@@ -46,6 +47,22 @@ public class AccountController {
         if (bindinResult.hasErrors()) return service.BindingResultErrors(bindinResult);
         return service
             .save(id, model)
+            .map(
+                response -> {
+                    return ResponseEntity.status(response.getStatus()).body(response.getResponse());
+                }
+            )
+            .defaultIfEmpty(ResponseEntity.internalServerError().build());
+    }
+
+    @PostMapping("/updateBalance")
+    public Mono<ResponseEntity<Map<String, Object>>> updateBalance(
+        @RequestBody updateBalanceModel model,
+        BindingResult bindinResult
+    ) {
+        if (bindinResult.hasErrors()) return service.BindingResultErrors(bindinResult);
+        return service
+            .updateBalance(model)
             .map(
                 response -> {
                     return ResponseEntity.status(response.getStatus()).body(response.getResponse());
