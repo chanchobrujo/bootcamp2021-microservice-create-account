@@ -14,7 +14,8 @@ public enum Constants {
         public static final String REPET_DATA = "Datos repetidos.";
 
         public static final String CLIENT_NOT_FOUND = "Cliente no econtrado.";
-        public static final String CLIENT_DELETED_SUCCESS = "Datos eliminados correctamente.";
+        public static final String CLIENT_DELETED_SUCCESS =
+            "Datos eliminados correctamente.";
 
         public static final String CLIENT_ACCOUNT_DENIED =
             "Usted ya no puede tener mas cuentas de este tipo.";

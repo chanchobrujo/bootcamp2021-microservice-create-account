@@ -31,7 +31,9 @@ public class AccountController {
     }
 
     @GetMapping("/{number}")
-    public Mono<ResponseEntity<Account>> findByNumber(@PathVariable("number") String number) {
+    public Mono<ResponseEntity<Account>> findByNumber(
+        @PathVariable("number") String number
+    ) {
         return service
             .findByNumber(number)
             .map(mapper -> ResponseEntity.ok().body(mapper))
@@ -47,11 +49,11 @@ public class AccountController {
         if (bindinResult.hasErrors()) return service.BindingResultErrors(bindinResult);
         return service
             .save(id, model)
-            .map(
-                response -> {
-                    return ResponseEntity.status(response.getStatus()).body(response.getResponse());
-                }
-            )
+            .map(response -> {
+                return ResponseEntity
+                    .status(response.getStatus())
+                    .body(response.getResponse());
+            })
             .defaultIfEmpty(ResponseEntity.internalServerError().build());
     }
 
@@ -63,11 +65,11 @@ public class AccountController {
         if (bindinResult.hasErrors()) return service.BindingResultErrors(bindinResult);
         return service
             .updateBalance(model)
-            .map(
-                response -> {
-                    return ResponseEntity.status(response.getStatus()).body(response.getResponse());
-                }
-            )
+            .map(response -> {
+                return ResponseEntity
+                    .status(response.getStatus())
+                    .body(response.getResponse());
+            })
             .defaultIfEmpty(ResponseEntity.internalServerError().build());
     }
 }
