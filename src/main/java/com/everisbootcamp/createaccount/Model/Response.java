@@ -1,5 +1,7 @@
 package com.everisbootcamp.createaccount.Model;
 
+import com.everisbootcamp.createaccount.Constant.Enums.MessagesError;
+import com.everisbootcamp.createaccount.Constant.Enums.MessagesSuccess;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
@@ -20,6 +22,16 @@ public class Response {
     public Response(String message, HttpStatus status) {
         this.message = message;
         this.status = status;
+    }
+
+    public Response(MessagesSuccess message) {
+        this.message = message.getMessages();
+        this.status = HttpStatus.valueOf(message.getCod());
+    }
+
+    public Response(MessagesError message) {
+        this.message = message.getMessages();
+        this.status = HttpStatus.valueOf(message.getCod());
     }
 
     public Map<String, Object> getResponse() {

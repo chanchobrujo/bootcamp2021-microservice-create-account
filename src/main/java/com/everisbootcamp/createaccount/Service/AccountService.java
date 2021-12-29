@@ -1,6 +1,8 @@
 package com.everisbootcamp.createaccount.Service;
 
-import com.everisbootcamp.createaccount.Constant.Constants;
+import com.everisbootcamp.createaccount.Constant.Enums.MessagesError;
+import com.everisbootcamp.createaccount.Constant.Enums.MessagesSuccess;
+import com.everisbootcamp.createaccount.Constant.Enums.TypeAccount;
 import com.everisbootcamp.createaccount.Data.Account;
 import com.everisbootcamp.createaccount.Interface.AccounRepository;
 import com.everisbootcamp.createaccount.Model.AccountModel;
@@ -9,7 +11,7 @@ import com.everisbootcamp.createaccount.Model.Response;
 import com.everisbootcamp.createaccount.Model.updateBalanceModel;
 import com.everisbootcamp.createaccount.Web.Consumer;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,19 +54,11 @@ public class AccountService {
         BindingResult bindinResult
     ) {
         Response response = new Response(
-            bindinResult
-                .getAllErrors()
-                .stream()
-                .findFirst()
-                .get()
-                .getDefaultMessage()
-                .toString(),
+            bindinResult.getAllErrors().stream().findFirst().get().getDefaultMessage().toString(),
             HttpStatus.NOT_ACCEPTABLE
         );
 
-        return Mono.just(
-            ResponseEntity.internalServerError().body(response.getResponse())
-        );
+        return Mono.just(ResponseEntity.internalServerError().body(response.getResponse()));
     }
 
     private Boolean filterCreatedAccountByTypeCustomer(
@@ -78,86 +72,63 @@ public class AccountService {
             accountByTypeCustomer(idcustomer, typeaccount) == 1
         ) filter = true;
         if (typecustomer.equals("Empresarial")) if (
-            typeaccount.equals("Cuenta de ahorro") ||
-            typeaccount.equals("Cuenta corriente")
+            typeaccount.equals("Cuenta de ahorro") || typeaccount.equals("Cuenta corriente")
         ) filter = true;
 
         return filter;
     }
 
     public Mono<Response> save(String idcustomer, AccountModel model) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        String message = Constants.Messages.CLIENT_NOT_FOUND;
+        Response response = new Response();
 
-        if (!(findCustomerById(idcustomer).getBody() == null)) {
+        Boolean verifyEmptyCustomer = Objects.isNull(findCustomerById(idcustomer).getBody());
+        Boolean verifyEmptyTypeAccount = TypeAccount.FindByName(model.getTypeaccount()).isEmpty();
+
+        if (verifyEmptyCustomer || verifyEmptyTypeAccount) {
+            response = new Response(MessagesError.NOTFOUND_DATA);
+        } else {
+            String typecustomer = findCustomerById(idcustomer).getBody().getTypecustomer();
+
             if (
-                Constants.TYPE_ACCOUNT
-                    .stream()
-                    .filter(p -> p.equals(model.getTypeaccount()))
-                    .collect(Collectors.toList())
-                    .isEmpty()
+                filterCreatedAccountByTypeCustomer(idcustomer, typecustomer, model.getTypeaccount())
             ) {
-                status = HttpStatus.NOT_ACCEPTABLE;
-                message = Constants.Messages.INVALID_DATA;
+                response = new Response(MessagesError.CLIENT_ACCOUNT_DENIED);
             } else {
-                String typecustomer = findCustomerById(idcustomer)
-                    .getBody()
-                    .getTypecustomer();
+                Account account = new Account(idcustomer, model.getTypeaccount(), null, 0.0);
 
-                if (
-                    filterCreatedAccountByTypeCustomer(
-                        idcustomer,
+                account.setRules(
+                    rulesService.addRule(
                         typecustomer,
-                        model.getTypeaccount()
+                        account.getTypeaccount(),
+                        account.getProfile(),
+                        model.getMaximumLimitMonthlyMovementsQuantity()
                     )
-                ) {
-                    message = Constants.Messages.CLIENT_ACCOUNT_DENIED;
-                } else {
-                    Account account = new Account(
-                        idcustomer,
-                        model.getTypeaccount(),
-                        null,
-                        0.0
-                    );
-
-                    account.setRules(
-                        rulesService.addRule(
-                            typecustomer,
-                            account.getTypeaccount(),
-                            account.getProfile(),
-                            model.getMaximumLimitMonthlyMovementsQuantity()
-                        )
-                    );
-                    repository.save(account).subscribe();
-
-                    status = HttpStatus.CREATED;
-                    message = Constants.Messages.CORRECT_DATA;
-                }
+                );
+                repository.save(account).subscribe();
+                response = new Response(MessagesSuccess.SUCCESS_REGISTER);
             }
         }
 
-        return Mono.just(new Response(message, status));
+        return Mono.just(response);
     }
 
     public Mono<Response> updateBalance(updateBalanceModel model) {
-        HttpStatus status = HttpStatus.CREATED;
-        String message = Constants.Messages.CORRECT_DATA;
+        Response response = new Response();
 
         try {
             Account account = repository
                 .findByNumberaccount(model.getNumberaccount())
-                .map(mapper -> {
-                    mapper.setAmount(model.getBalance());
-                    return mapper;
-                })
+                .map(
+                    mapper -> {
+                        mapper.setAmount(model.getBalance());
+                        return mapper;
+                    }
+                )
                 .block();
             repository.save(account).subscribe();
-        } catch (Exception e) {
-            status = HttpStatus.NOT_ACCEPTABLE;
-            message = Constants.Messages.INVALID_DATA;
-        }
+        } catch (Exception e) {}
 
-        return Mono.just(new Response(message, status));
+        return Mono.just(response);
     }
 
     public Mono<Account> findByNumber(String number) {
