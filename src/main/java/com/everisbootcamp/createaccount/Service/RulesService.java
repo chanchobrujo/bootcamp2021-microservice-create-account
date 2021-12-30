@@ -1,5 +1,6 @@
 package com.everisbootcamp.createaccount.Service;
 
+import com.everisbootcamp.createaccount.Common.Utils;
 import com.everisbootcamp.createaccount.Constant.Enums.RuleName;
 import com.everisbootcamp.createaccount.Constant.Enums.Types.TypeAccount;
 import com.everisbootcamp.createaccount.Constant.Enums.Types.TypeCustomer;
@@ -35,20 +36,18 @@ public class RulesService {
         Boolean verifyAccountFix = type
             .getTypeaccount()
             .equals(TypeAccount.ACCOUNT_FIX.getTypeaccount());
+        Boolean verifyProfile = !Utils.StringEmpty(profile);
 
         Map<String, Object> rules = new HashMap<>();
         rules.put(RuleName.CUSTOMERTYPE.getName(), customerType);
         rules.put(RuleName.COMMISSIONMAINTENANCE.getName(), commissionMaintenance);
         rules.put(RuleName.MAXLIMITMOVMONTHLY.getName(), maximumLimitMonthlyMovements);
+
         if (maximumLimitMonthlyMovements) {
-            if (verifyAccountFix) {
-                MAX = 1;
-            }
+            if (verifyAccountFix) MAX = 1;
             rules.put(RuleName.MAXLIMITMOVMONTHLYNUMBER.getName(), MAX);
         }
-        if (profile != null) {
-            rules.put(RuleName.PROFILE.getName(), profile);
-        }
+        if (verifyProfile) rules.put(RuleName.PROFILE.getName(), profile);
         return rules;
     }
 
