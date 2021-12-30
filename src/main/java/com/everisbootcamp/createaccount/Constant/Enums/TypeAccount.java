@@ -7,15 +7,17 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum TypeAccount {
-    ACCOUNT_FIX("Cuenta plazo fijo."),
-    ACCOUNT_SAV("Cuenta de ahorro."),
-    ACCOUNT_COR("Cuenta corriente.");
+    ACCOUNT_FIX("Cuenta plazo fijo.", true, true),
+    ACCOUNT_SAV("Cuenta de ahorro.", true, true),
+    ACCOUNT_COR("Cuenta corriente.", true, true);
 
-    private String name;
+    private String typeaccount;
+    private Boolean commissionMaintenance;
+    private Boolean maximumLimitMonthlyMovements;
 
     public static Optional<TypeAccount> FindByName(String name) {
         for (TypeAccount type : values()) {
-            Boolean verify = type.getName().toUpperCase().equals(name.toUpperCase());
+            Boolean verify = type.getTypeaccount().toUpperCase().equals(name.toUpperCase());
             if (verify) return Optional.of(type);
         }
         return Optional.empty();

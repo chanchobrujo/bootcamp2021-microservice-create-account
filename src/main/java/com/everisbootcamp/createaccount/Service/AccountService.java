@@ -3,6 +3,7 @@ package com.everisbootcamp.createaccount.Service;
 import com.everisbootcamp.createaccount.Constant.Enums.MessagesError;
 import com.everisbootcamp.createaccount.Constant.Enums.MessagesSuccess;
 import com.everisbootcamp.createaccount.Constant.Enums.TypeAccount;
+import com.everisbootcamp.createaccount.Constant.Enums.TypeCustomer;
 import com.everisbootcamp.createaccount.Data.Account;
 import com.everisbootcamp.createaccount.Interface.AccounRepository;
 import com.everisbootcamp.createaccount.Model.AccountModel;
@@ -33,9 +34,6 @@ public class AccountService {
     @Autowired
     private WebClientCustomer WebClientCustomer;
 
-    @Autowired
-    private FilterServiceAccount filterServiceAccount;
-
     public Mono<ResponseEntity<Map<String, Object>>> BindingResultErrors(
         BindingResult bindinResult
     ) {
@@ -45,27 +43,6 @@ public class AccountService {
         );
 
         return Mono.just(ResponseEntity.internalServerError().body(response.getResponse()));
-    }
-
-    private Boolean filterCreatedAccountByTypeCustomer(
-        String idcustomer,
-        String typecustomer,
-        String typeaccount
-    ) {
-        Boolean filter = false;
-
-        if (typecustomer.equals("Personal")) {
-            Long VerifyAccounts =
-                this.filterServiceAccount.accountByTypeCustomer(idcustomer, typeaccount);
-            if (VerifyAccounts == 1) filter = true;
-        }
-        if (typecustomer.equals("Empresarial")) {
-            if (
-                typeaccount.equals("Cuenta de ahorro") || typeaccount.equals("Cuenta corriente")
-            ) filter = true;
-        }
-
-        return filter;
     }
 
     public Mono<Response> save(String idcustomer, AccountModel model) {
@@ -81,7 +58,7 @@ public class AccountService {
         } else {
             String typecustomer = modelCustomer.getBody().getTypecustomer();
             Boolean verifyFilter =
-                this.filterCreatedAccountByTypeCustomer(
+                this.rulesService.filterCreatedAccountByTypeCustomer(
                         idcustomer,
                         typecustomer,
                         model.getTypeaccount()
