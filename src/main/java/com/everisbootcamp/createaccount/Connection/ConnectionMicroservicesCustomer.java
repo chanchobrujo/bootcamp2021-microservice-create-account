@@ -1,11 +1,11 @@
-package com.everisbootcamp.createaccount.Web;
+package com.everisbootcamp.createaccount.Connection;
 
 import com.everisbootcamp.createaccount.Model.CustomerModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WebClientCustomer {
+public class ConnectionMicroservicesCustomer {
 
     public ResponseEntity<CustomerModel> findCustomerById(String idcustomer) {
         return Consumer.webClientCustomer

@@ -1,4 +1,4 @@
-package com.everisbootcamp.createaccount.Web;
+package com.everisbootcamp.createaccount.Connection;
 
 import com.everisbootcamp.createaccount.Constant.Paths.Path;
 import org.springframework.web.reactive.function.client.WebClient;
