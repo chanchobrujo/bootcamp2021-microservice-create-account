@@ -17,7 +17,7 @@ public enum TypeAccount {
 
     public static Optional<TypeAccount> FindByName(String name) {
         for (TypeAccount type : values()) {
-            Boolean verify = type.getTypeaccount().toUpperCase().equals(name.toUpperCase());
+            Boolean verify = type.getTypeaccount().toUpperCase().contains(name.toUpperCase());
             if (verify) return Optional.of(type);
         }
         return Optional.empty();
