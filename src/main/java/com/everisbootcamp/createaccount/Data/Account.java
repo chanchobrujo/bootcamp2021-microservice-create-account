@@ -29,7 +29,6 @@ public class Account {
 
     private String idcustomer;
     private String typeaccount;
-    private String profile;
     private Double amount;
 
     private Map<String, Object> rules;
@@ -37,10 +36,9 @@ public class Account {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime datecreated = LocalDateTime.now(ZoneId.of("America/Lima"));
 
-    public Account(String idcustomer, String typeaccount, String profile, Double amount) {
+    public Account(String idcustomer, String typeaccount, Double amount) {
         this.idcustomer = idcustomer;
         this.typeaccount = typeaccount;
-        this.profile = profile;
         this.amount = amount;
     }
 }

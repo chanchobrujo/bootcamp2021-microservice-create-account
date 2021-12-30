@@ -46,6 +46,9 @@ public class RulesService {
             }
             rules.put(RuleName.MAXLIMITMOVMONTHLYNUMBER.getName(), MAX);
         }
+        if (profile != null) {
+            rules.put(RuleName.PROFILE.getName(), profile);
+        }
         return rules;
     }
 
