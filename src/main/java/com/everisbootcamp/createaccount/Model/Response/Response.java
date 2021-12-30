@@ -1,4 +1,4 @@
-package com.everisbootcamp.createaccount.Model;
+package com.everisbootcamp.createaccount.Model.Response;
 
 import com.everisbootcamp.createaccount.Constant.Enums.Messages.MessagesError;
 import com.everisbootcamp.createaccount.Constant.Enums.Messages.MessagesSuccess;

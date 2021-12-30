@@ -1,4 +1,4 @@
-package com.everisbootcamp.createaccount.Model;
+package com.everisbootcamp.createaccount.Model.Response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.*;
@@ -13,7 +13,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class CustomerModel {
+public class ResponseCustomer {
 
     private String idcustomer;
 
