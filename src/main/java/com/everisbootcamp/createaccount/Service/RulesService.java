@@ -29,6 +29,10 @@ public class RulesService {
         TypeAccount type = TypeAccount.FindByName(accountType).get();
         Boolean commissionMaintenance = type.getCommissionMaintenance();
         Boolean maximumLimitMonthlyMovements = type.getMaximumLimitMonthlyMovements();
+        Boolean verifyAccountFix = type
+            .getTypeaccount()
+            .equals(TypeAccount.ACCOUNT_FIX.getTypeaccount());
+        if (verifyAccountFix) maximumLimitMonthlyMovementsQuantity = 1;
 
         return Rules
             .builder()

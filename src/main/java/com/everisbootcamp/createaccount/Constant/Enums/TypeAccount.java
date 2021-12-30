@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum TypeAccount {
-    ACCOUNT_FIX("Cuenta plazo fijo.", true, true),
-    ACCOUNT_SAV("Cuenta de ahorro.", true, true),
-    ACCOUNT_COR("Cuenta corriente.", true, true);
+    ACCOUNT_SAV("Cuenta de ahorro.", false, true),
+    ACCOUNT_COR("Cuenta corriente.", true, false),
+    ACCOUNT_FIX("Cuenta plazo fijo.", false, true);
 
     private String typeaccount;
     private Boolean commissionMaintenance;
