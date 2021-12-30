@@ -6,12 +6,12 @@ import com.everisbootcamp.createaccount.Constant.Enums.Messages.MessagesError;
 import com.everisbootcamp.createaccount.Constant.Enums.Messages.MessagesSuccess;
 import com.everisbootcamp.createaccount.Constant.Enums.Types.TypeAccount;
 import com.everisbootcamp.createaccount.Data.Account;
-import com.everisbootcamp.createaccount.Data.Rules;
 import com.everisbootcamp.createaccount.Interface.AccounRepository;
 import com.everisbootcamp.createaccount.Model.AccountModel;
 import com.everisbootcamp.createaccount.Model.CustomerModel;
 import com.everisbootcamp.createaccount.Model.Response;
 import com.everisbootcamp.createaccount.Model.updateBalanceModel;
+import java.util.Map;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -67,8 +67,8 @@ public class AccountService {
                     .build();
 
                 Integer max = model.getMaximumLimitMonthlyMovementsQuantity();
-                Rules rule =
-                    this.rulesService.addRule(
+                Map<String, Object> rule =
+                    this.rulesService.defineRules(
                             typecustomer,
                             account.getTypeaccount(),
                             account.getProfile(),

@@ -1,8 +1,10 @@
 package com.everisbootcamp.createaccount.Service;
 
+import com.everisbootcamp.createaccount.Constant.Enums.RuleName;
 import com.everisbootcamp.createaccount.Constant.Enums.Types.TypeAccount;
 import com.everisbootcamp.createaccount.Constant.Enums.Types.TypeCustomer;
-import com.everisbootcamp.createaccount.Data.Rules;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,27 +22,31 @@ public class RulesService {
         return typeCustomer.getName().toUpperCase().equals(name.toUpperCase());
     }
 
-    public Rules addRule(
+    public Map<String, Object> defineRules(
         String customerType,
         String accountType,
         String profile,
-        Integer maximumLimitMonthlyMovementsQuantity
+        Integer MAX
     ) {
         TypeAccount type = TypeAccount.FindByName(accountType).get();
+
         Boolean commissionMaintenance = type.getCommissionMaintenance();
         Boolean maximumLimitMonthlyMovements = type.getMaximumLimitMonthlyMovements();
         Boolean verifyAccountFix = type
             .getTypeaccount()
             .equals(TypeAccount.ACCOUNT_FIX.getTypeaccount());
-        if (verifyAccountFix) maximumLimitMonthlyMovementsQuantity = 1;
 
-        return Rules
-            .builder()
-            .customerType(customerType)
-            .commissionMaintenance(commissionMaintenance)
-            .maximumLimitMonthlyMovements(maximumLimitMonthlyMovements)
-            .maximumLimitMonthlyMovementsQuantity(maximumLimitMonthlyMovementsQuantity)
-            .build();
+        Map<String, Object> rules = new HashMap<>();
+        rules.put(RuleName.CUSTOMERTYPE.getName(), customerType);
+        rules.put(RuleName.COMMISSIONMAINTENANCE.getName(), commissionMaintenance);
+        rules.put(RuleName.MAXLIMITMOVMONTHLY.getName(), maximumLimitMonthlyMovements);
+        if (maximumLimitMonthlyMovements) {
+            if (verifyAccountFix) {
+                MAX = 1;
+            }
+            rules.put(RuleName.MAXLIMITMOVMONTHLYNUMBER.getName(), MAX);
+        }
+        return rules;
     }
 
     public Boolean filterCreatedAccountByTypeCustomer(
