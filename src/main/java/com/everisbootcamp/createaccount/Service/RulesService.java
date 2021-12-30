@@ -1,7 +1,7 @@
 package com.everisbootcamp.createaccount.Service;
 
-import com.everisbootcamp.createaccount.Constant.Enums.TypeAccount;
-import com.everisbootcamp.createaccount.Constant.Enums.TypeCustomer;
+import com.everisbootcamp.createaccount.Constant.Enums.Types.TypeAccount;
+import com.everisbootcamp.createaccount.Constant.Enums.Types.TypeCustomer;
 import com.everisbootcamp.createaccount.Data.Rules;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
