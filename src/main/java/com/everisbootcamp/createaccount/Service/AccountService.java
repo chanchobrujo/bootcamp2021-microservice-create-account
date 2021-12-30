@@ -61,7 +61,6 @@ public class AccountService {
                     .builder()
                     .idcustomer(idcustomer)
                     .typeaccount(model.getTypeaccount())
-                    .profile(null)
                     .amount(0.0)
                     .numberaccount(numberaccount)
                     .build();
@@ -71,7 +70,7 @@ public class AccountService {
                     this.rulesService.defineRules(
                             typecustomer,
                             account.getTypeaccount(),
-                            account.getProfile(),
+                            model.getProfile(),
                             max
                         );
 
