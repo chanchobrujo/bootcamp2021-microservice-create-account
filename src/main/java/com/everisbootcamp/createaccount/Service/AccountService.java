@@ -1,15 +1,17 @@
 package com.everisbootcamp.createaccount.Service;
 
+import com.everisbootcamp.createaccount.Connection.ConnectionMicroservicesCustomer;
+import com.everisbootcamp.createaccount.Connection.ConnectionMicroservicesLogic;
 import com.everisbootcamp.createaccount.Constant.Enums.MessagesError;
 import com.everisbootcamp.createaccount.Constant.Enums.MessagesSuccess;
 import com.everisbootcamp.createaccount.Constant.Enums.TypeAccount;
 import com.everisbootcamp.createaccount.Data.Account;
+import com.everisbootcamp.createaccount.Data.Rules;
 import com.everisbootcamp.createaccount.Interface.AccounRepository;
 import com.everisbootcamp.createaccount.Model.AccountModel;
 import com.everisbootcamp.createaccount.Model.CustomerModel;
 import com.everisbootcamp.createaccount.Model.Response;
 import com.everisbootcamp.createaccount.Model.updateBalanceModel;
-import com.everisbootcamp.createaccount.Web.WebClientCustomer;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +29,15 @@ public class AccountService {
     private RulesService rulesService;
 
     @Autowired
-    private WebClientCustomer WebClientCustomer;
+    private ConnectionMicroservicesCustomer ConnectionMicroservicesCustomer;
+
+    @Autowired
+    private ConnectionMicroservicesLogic ConnectionMicroservicesLogic;
 
     public Mono<Response> save(String idcustomer, AccountModel model) {
         Response response = new Response();
         ResponseEntity<CustomerModel> modelCustomer =
-            this.WebClientCustomer.findCustomerById(idcustomer);
+            this.ConnectionMicroservicesCustomer.findCustomerById(idcustomer);
 
         Boolean verifyEmptyCustomer = Objects.isNull(modelCustomer.getBody());
         Boolean verifyEmptyTypeAccount = TypeAccount.FindByName(model.getTypeaccount()).isEmpty();
@@ -51,16 +56,26 @@ public class AccountService {
             if (verifyFilter) {
                 response = new Response(MessagesError.CLIENT_ACCOUNT_DENIED);
             } else {
-                Account account = new Account(idcustomer, model.getTypeaccount(), null, 0.0);
+                String numberaccount = this.ConnectionMicroservicesLogic.generatedNumberRandom(8);
+                Account account = Account
+                    .builder()
+                    .idcustomer(idcustomer)
+                    .typeaccount(model.getTypeaccount())
+                    .profile(null)
+                    .amount(0.0)
+                    .numberaccount(numberaccount)
+                    .build();
 
-                account.setRules(
-                    rulesService.addRule(
-                        typecustomer,
-                        account.getTypeaccount(),
-                        account.getProfile(),
-                        model.getMaximumLimitMonthlyMovementsQuantity()
-                    )
-                );
+                Integer max = model.getMaximumLimitMonthlyMovementsQuantity();
+                Rules rule =
+                    this.rulesService.addRule(
+                            typecustomer,
+                            account.getTypeaccount(),
+                            account.getProfile(),
+                            max
+                        );
+
+                account.setRules(rule);
                 repository.save(account).subscribe();
                 response = new Response(MessagesSuccess.SUCCESS_REGISTER);
             }
