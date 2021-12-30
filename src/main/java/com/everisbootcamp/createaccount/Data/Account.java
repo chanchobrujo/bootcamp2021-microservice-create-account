@@ -1,9 +1,11 @@
 package com.everisbootcamp.createaccount.Data;
 
-import com.everisbootcamp.createaccount.Web.Consumer;
+import com.everisbootcamp.createaccount.Connection.Consumer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,21 +17,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Setter
 @NoArgsConstructor
 @ToString
+@Builder
+@AllArgsConstructor
 @Document(collection = "accounts")
 public class Account {
 
     @Id
     private String idaccount;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    private LocalDateTime datecreated = LocalDateTime.now(ZoneId.of("America/Lima"));
-
-    private String numberaccount = Consumer.webClientLogic
-        .get()
-        .uri("/generatednumber/12")
-        .retrieve()
-        .bodyToMono(String.class)
-        .block();
+    private String numberaccount;
 
     private String idcustomer;
     private String typeaccount;
@@ -37,6 +33,9 @@ public class Account {
     private Double amount;
 
     private Rules rules;
+
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime datecreated = LocalDateTime.now(ZoneId.of("America/Lima"));
 
     public Account(String idcustomer, String typeaccount, String profile, Double amount) {
         this.idcustomer = idcustomer;
