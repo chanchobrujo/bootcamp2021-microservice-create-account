@@ -1,6 +1,7 @@
 package com.everisbootcamp.createaccount.Controller;
 
 import com.everisbootcamp.createaccount.Data.Account;
+import com.everisbootcamp.createaccount.Error.ResponseBindingResultErrors;
 import com.everisbootcamp.createaccount.Model.AccountModel;
 import com.everisbootcamp.createaccount.Model.updateBalanceModel;
 import com.everisbootcamp.createaccount.Service.AccountService;
@@ -25,6 +26,9 @@ public class AccountController {
     @Autowired
     private AccountService service;
 
+    @Autowired
+    private ResponseBindingResultErrors responseBindingResultErrors;
+
     @GetMapping("/")
     public Mono<ResponseEntity<Flux<Account>>> findByAll() {
         return Mono.just(ResponseEntity.ok().body(service.findAll()));
@@ -44,7 +48,9 @@ public class AccountController {
         @RequestBody @Valid AccountModel model,
         BindingResult bindinResult
     ) {
-        if (bindinResult.hasErrors()) return service.BindingResultErrors(bindinResult);
+        if (bindinResult.hasErrors()) return this.responseBindingResultErrors.BindingResultErrors(
+                bindinResult
+            );
         return service
             .save(id, model)
             .map(
@@ -60,7 +66,9 @@ public class AccountController {
         @RequestBody updateBalanceModel model,
         BindingResult bindinResult
     ) {
-        if (bindinResult.hasErrors()) return service.BindingResultErrors(bindinResult);
+        if (bindinResult.hasErrors()) return this.responseBindingResultErrors.BindingResultErrors(
+                bindinResult
+            );
         return service
             .updateBalance(model)
             .map(

@@ -10,13 +10,10 @@ import com.everisbootcamp.createaccount.Model.CustomerModel;
 import com.everisbootcamp.createaccount.Model.Response;
 import com.everisbootcamp.createaccount.Model.updateBalanceModel;
 import com.everisbootcamp.createaccount.Web.WebClientCustomer;
-import java.util.Map;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -31,17 +28,6 @@ public class AccountService {
 
     @Autowired
     private WebClientCustomer WebClientCustomer;
-
-    public Mono<ResponseEntity<Map<String, Object>>> BindingResultErrors(
-        BindingResult bindinResult
-    ) {
-        Response response = new Response(
-            bindinResult.getAllErrors().stream().findFirst().get().getDefaultMessage().toString(),
-            HttpStatus.NOT_ACCEPTABLE
-        );
-
-        return Mono.just(ResponseEntity.internalServerError().body(response.getResponse()));
-    }
 
     public Mono<Response> save(String idcustomer, AccountModel model) {
         Response response = new Response();
