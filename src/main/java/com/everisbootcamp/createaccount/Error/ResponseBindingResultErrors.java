@@ -1,6 +1,6 @@
 package com.everisbootcamp.createaccount.Error;
 
-import com.everisbootcamp.createaccount.Model.Response;
+import com.everisbootcamp.createaccount.Model.Response.Response;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
