@@ -23,7 +23,11 @@ public enum Path {
             return HTTP_CONSTANT.concat(GATEWAY).concat(value).concat(SLASH);
         }
 
-        public static final String LOGIC_PATH = SERVICE_CALL(SERVER_PATH).concat("logic");
-        public static final String CUSTOMERS_PATH = SERVICE_CALL(MS_PATH).concat("customer");
+        public static final String LOGIC_PATH = SERVICE_CALL(SERVER_PATH)
+            .concat("logic")
+            .concat(SLASH);
+        public static final String CUSTOMERS_PATH = SERVICE_CALL(MS_PATH)
+            .concat("customer")
+            .concat(SLASH);
     }
 }

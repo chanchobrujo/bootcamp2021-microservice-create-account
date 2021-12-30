@@ -10,6 +10,7 @@ import com.everisbootcamp.createaccount.Model.CustomerModel;
 import com.everisbootcamp.createaccount.Model.Response;
 import com.everisbootcamp.createaccount.Model.updateBalanceModel;
 import com.everisbootcamp.createaccount.Web.Consumer;
+import com.everisbootcamp.createaccount.Web.WebClientCustomer;
 import java.util.Map;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,26 +30,11 @@ public class AccountService {
     @Autowired
     private RulesService rulesService;
 
-    private ResponseEntity<CustomerModel> findCustomerById(String idcustomer) {
-        return Consumer.webClientCustomer
-            .get()
-            .uri("/".concat(idcustomer))
-            .retrieve()
-            .onStatus(status -> status.value() == 404, clientResponse -> Mono.empty())
-            .toEntity(CustomerModel.class)
-            .block();
-    }
+    @Autowired
+    private WebClientCustomer WebClientCustomer;
 
-    private Long accountByTypeCustomer(String idcustomer, String typeaccount) {
-        return repository
-            .findAll()
-            .collectList()
-            .block()
-            .stream()
-            .filter(a -> a.getIdcustomer().equals(idcustomer))
-            .filter(aa -> aa.getTypeaccount().equals(typeaccount))
-            .count();
-    }
+    @Autowired
+    private FilterServiceAccount filterServiceAccount;
 
     public Mono<ResponseEntity<Map<String, Object>>> BindingResultErrors(
         BindingResult bindinResult
@@ -68,30 +54,40 @@ public class AccountService {
     ) {
         Boolean filter = false;
 
-        if (typecustomer.equals("Personal")) if (
-            accountByTypeCustomer(idcustomer, typeaccount) == 1
-        ) filter = true;
-        if (typecustomer.equals("Empresarial")) if (
-            typeaccount.equals("Cuenta de ahorro") || typeaccount.equals("Cuenta corriente")
-        ) filter = true;
+        if (typecustomer.equals("Personal")) {
+            Long VerifyAccounts =
+                this.filterServiceAccount.accountByTypeCustomer(idcustomer, typeaccount);
+            if (VerifyAccounts == 1) filter = true;
+        }
+        if (typecustomer.equals("Empresarial")) {
+            if (
+                typeaccount.equals("Cuenta de ahorro") || typeaccount.equals("Cuenta corriente")
+            ) filter = true;
+        }
 
         return filter;
     }
 
     public Mono<Response> save(String idcustomer, AccountModel model) {
         Response response = new Response();
+        ResponseEntity<CustomerModel> modelCustomer =
+            this.WebClientCustomer.findCustomerById(idcustomer);
 
-        Boolean verifyEmptyCustomer = Objects.isNull(findCustomerById(idcustomer).getBody());
+        Boolean verifyEmptyCustomer = Objects.isNull(modelCustomer.getBody());
         Boolean verifyEmptyTypeAccount = TypeAccount.FindByName(model.getTypeaccount()).isEmpty();
 
         if (verifyEmptyCustomer || verifyEmptyTypeAccount) {
             response = new Response(MessagesError.NOTFOUND_DATA);
         } else {
-            String typecustomer = findCustomerById(idcustomer).getBody().getTypecustomer();
+            String typecustomer = modelCustomer.getBody().getTypecustomer();
+            Boolean verifyFilter =
+                this.filterCreatedAccountByTypeCustomer(
+                        idcustomer,
+                        typecustomer,
+                        model.getTypeaccount()
+                    );
 
-            if (
-                filterCreatedAccountByTypeCustomer(idcustomer, typecustomer, model.getTypeaccount())
-            ) {
+            if (verifyFilter) {
                 response = new Response(MessagesError.CLIENT_ACCOUNT_DENIED);
             } else {
                 Account account = new Account(idcustomer, model.getTypeaccount(), null, 0.0);
