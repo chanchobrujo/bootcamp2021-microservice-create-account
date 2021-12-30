@@ -1,6 +1,5 @@
 package com.everisbootcamp.createaccount.Data;
 
-import com.everisbootcamp.createaccount.Connection.Consumer;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;

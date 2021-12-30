@@ -2,9 +2,9 @@ package com.everisbootcamp.createaccount.Service;
 
 import com.everisbootcamp.createaccount.Connection.ConnectionMicroservicesCustomer;
 import com.everisbootcamp.createaccount.Connection.ConnectionMicroservicesLogic;
-import com.everisbootcamp.createaccount.Constant.Enums.MessagesError;
-import com.everisbootcamp.createaccount.Constant.Enums.MessagesSuccess;
-import com.everisbootcamp.createaccount.Constant.Enums.TypeAccount;
+import com.everisbootcamp.createaccount.Constant.Enums.Messages.MessagesError;
+import com.everisbootcamp.createaccount.Constant.Enums.Messages.MessagesSuccess;
+import com.everisbootcamp.createaccount.Constant.Enums.Types.TypeAccount;
 import com.everisbootcamp.createaccount.Data.Account;
 import com.everisbootcamp.createaccount.Data.Rules;
 import com.everisbootcamp.createaccount.Interface.AccounRepository;

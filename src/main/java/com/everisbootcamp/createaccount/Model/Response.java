@@ -1,7 +1,7 @@
 package com.everisbootcamp.createaccount.Model;
 
-import com.everisbootcamp.createaccount.Constant.Enums.MessagesError;
-import com.everisbootcamp.createaccount.Constant.Enums.MessagesSuccess;
+import com.everisbootcamp.createaccount.Constant.Enums.Messages.MessagesError;
+import com.everisbootcamp.createaccount.Constant.Enums.Messages.MessagesSuccess;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;

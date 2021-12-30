@@ -1,4 +1,4 @@
-package com.everisbootcamp.createaccount.Constant.Enums;
+package com.everisbootcamp.createaccount.Constant.Enums.Types;
 
 import java.util.Optional;
 import lombok.AllArgsConstructor;

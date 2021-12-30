@@ -1,4 +1,4 @@
-package com.everisbootcamp.createaccount.Constant.Enums;
+package com.everisbootcamp.createaccount.Constant.Enums.Messages;
 
 import lombok.Getter;
 
