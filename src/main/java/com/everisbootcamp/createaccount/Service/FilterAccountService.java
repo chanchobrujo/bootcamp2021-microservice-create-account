@@ -12,12 +12,12 @@ public class FilterAccountService {
 
     public Long accountByTypeCustomer(String IDC, String TYA) {
         return repository
-                .findAll()
-                .collectList()
-                .block()
-                .stream()
-                .filter(a -> a.getIdcustomer().equals(IDC))
-                .filter(aa -> aa.getTypeaccount().equals(TYA))
-                .count();
+            .findAll()
+            .collectList()
+            .block()
+            .stream()
+            .filter(a -> a.getIdcustomer().equals(IDC))
+            .filter(aa -> aa.getTypeaccount().equals(TYA))
+            .count();
     }
 }
