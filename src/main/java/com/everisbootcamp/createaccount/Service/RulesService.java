@@ -78,21 +78,19 @@ public class RulesService {
     }
 
     public Map<String, Object> SetPropertiesRules(Map<String, Object> rule) {
-        Boolean commissionMaintenance = (Boolean) rule.get(
-            RuleName.COMMISSIONMAINTENANCE.getName()
-        );
-        Boolean maximumLimitMonthlyMovements = (Boolean) rule.get(
-            RuleName.MAXLIMITMOVMONTHLY.getName()
+        String commissionMaintenance = RuleName.COMMISSIONMAINTENANCE.getName();
+        String maximumLimitMonthlyMovements = RuleName.MAXLIMITMOVMONTHLY.getName();
+
+        Boolean commissionMaintenanceValue = (Boolean) rule.get(commissionMaintenance);
+        Boolean maximumLimitMonthlyMovementsValue = (Boolean) rule.get(
+            maximumLimitMonthlyMovements
         );
 
-        rule.put(
-            RuleName.COMMISSIONMAINTENANCE.getName(),
-            Utils.BooleanToString(commissionMaintenance)
-        );
-        rule.put(
-            RuleName.MAXLIMITMOVMONTHLY.getName(),
-            Utils.BooleanToString(maximumLimitMonthlyMovements)
-        );
+        String rescm = Utils.BooleanToString(commissionMaintenanceValue);
+        String resmxm = Utils.BooleanToString(maximumLimitMonthlyMovementsValue);
+
+        rule.put(commissionMaintenance, rescm);
+        rule.put(maximumLimitMonthlyMovements, resmxm);
 
         return rule;
     }
