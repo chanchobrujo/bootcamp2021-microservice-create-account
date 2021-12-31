@@ -1,5 +1,6 @@
 package com.everisbootcamp.createaccount.Constant.Enums.Types;
 
+import com.everisbootcamp.createaccount.Common.Utils;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public enum TypeAccount {
 
     public static Optional<TypeAccount> FindByName(String name) {
         for (TypeAccount type : values()) {
-            Boolean verify = type.getTypeaccount().toUpperCase().contains(name.toUpperCase());
+            Boolean verify = Utils.equalsOrContains(type.getTypeaccount(), name);
             if (verify) return Optional.of(type);
         }
         return Optional.empty();
