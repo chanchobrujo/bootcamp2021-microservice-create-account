@@ -1,6 +1,7 @@
 package com.everisbootcamp.createaccount.Common;
 
 import com.everisbootcamp.createaccount.Constant.Enums.YesOrNot;
+import java.util.Objects;
 
 public class Utils {
 
@@ -11,7 +12,7 @@ public class Utils {
      * @return Boolean
      */
     public static Boolean StringEmpty(String value) {
-        return value.length() == 0 || value == null || value.isEmpty();
+        return value.length() == 0 || Objects.isNull(value) || value.isEmpty();
     }
 
     /**

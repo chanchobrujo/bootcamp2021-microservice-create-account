@@ -49,7 +49,7 @@ public class SaveAccountService {
         } else {
             String IDC = modelCustomer.getBody().getIdcustomer();
             String TYC = modelCustomer.getBody().getTypecustomer();
-            String TYA = model.getTypeaccount();
+            String TYA = TypeAccount.FindByName(model.getTypeaccount()).get().getTypeaccount();
             String PROFILE = model.getProfile();
             Boolean verifyFilter = this.FilterCATC(IDC, TYC, TYA);
 

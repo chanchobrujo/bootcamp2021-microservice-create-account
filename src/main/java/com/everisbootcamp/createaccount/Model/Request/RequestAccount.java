@@ -15,7 +15,7 @@ public class RequestAccount {
     @NotBlank(message = "El campo tipo de cuenta, no debe estar vacio.")
     private String typeaccount;
 
-    private String profile;
+    private String profile = "";
 
     private int maximumLimitMonthlyMovementsQuantity;
 }
