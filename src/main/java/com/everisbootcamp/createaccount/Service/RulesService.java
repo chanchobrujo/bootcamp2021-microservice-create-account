@@ -81,9 +81,9 @@ public class RulesService {
         String commissionMaintenance = RuleName.COMMISSIONMAINTENANCE.getName();
         String maximumLimitMonthlyMovements = RuleName.MAXLIMITMOVMONTHLY.getName();
 
-        Boolean commissionMaintenanceValue = (Boolean) rule.get(commissionMaintenance);
-        Boolean maximumLimitMonthlyMovementsValue = (Boolean) rule.get(
-            maximumLimitMonthlyMovements
+        Boolean commissionMaintenanceValue = Utils.ObjectToBoolean(rule.get(commissionMaintenance));
+        Boolean maximumLimitMonthlyMovementsValue = Utils.ObjectToBoolean(
+            rule.get(maximumLimitMonthlyMovements)
         );
 
         String rescm = Utils.BooleanToString(commissionMaintenanceValue);

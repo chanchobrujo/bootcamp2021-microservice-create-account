@@ -11,4 +11,8 @@ public class Utils {
     public static String BooleanToString(Boolean value) {
         return value ? YesOrNot.YES.getValue() : YesOrNot.NO.getValue();
     }
+
+    public static Boolean ObjectToBoolean(Object value) {
+        return ((Boolean) value).booleanValue();
+    }
 }
