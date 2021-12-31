@@ -23,23 +23,18 @@ public class DefineRulesService {
         return typeCustomer.getName().toUpperCase().equals(name.toUpperCase());
     }
 
-    public Map<String, Object> defineRules(
-        String customerType,
-        String accountType,
-        String profile,
-        Integer MAX
-    ) {
-        TypeAccount type = TypeAccount.FindByName(accountType).get();
+    public Map<String, Object> defineRules(String TYC, String TYA, String PRO, Integer MAX) {
+        TypeAccount type = TypeAccount.FindByName(TYA).get();
 
         Boolean commissionMaintenance = type.getCommissionMaintenance();
         Boolean maximumLimitMonthlyMovements = type.getMaximumLimitMonthlyMovements();
         Boolean verifyAccountFix = type
             .getTypeaccount()
             .equals(TypeAccount.ACCOUNT_FIX.getTypeaccount());
-        Boolean verifyProfile = !Utils.StringEmpty(profile);
+        Boolean verifyProfile = !Utils.StringEmpty(PRO);
 
         Map<String, Object> rules = new HashMap<>();
-        rules.put(RuleName.CUSTOMERTYPE.getName(), customerType);
+        rules.put(RuleName.CUSTOMERTYPE.getName(), TYC);
         rules.put(RuleName.COMMISSIONMAINTENANCE.getName(), commissionMaintenance);
         rules.put(RuleName.MAXLIMITMOVMONTHLY.getName(), maximumLimitMonthlyMovements);
 
@@ -47,29 +42,22 @@ public class DefineRulesService {
             if (verifyAccountFix) MAX = 1;
             rules.put(RuleName.MAXLIMITMOVMONTHLYNUMBER.getName(), MAX);
         }
-        if (verifyProfile) rules.put(RuleName.PROFILE.getName(), profile);
+        if (verifyProfile) rules.put(RuleName.PROFILE.getName(), PRO);
         return rules;
     }
 
-    public Boolean filterCreatedAccountByTypeCustomer(
-        String idcustomer,
-        String typecustomer,
-        String typeaccount
-    ) {
+    public Boolean filterCreatedAccountByTypeCustomer(String IDC, String TYC, String TYA) {
         Boolean filter = false;
-        Boolean VerifyTypePer = this.VerifyTypeCustomer(TypeCustomer.PERSONAL, typecustomer);
-        Boolean VerifyTypeEmp = this.VerifyTypeCustomer(TypeCustomer.EMPRESARIAL, typecustomer);
+        Boolean VerifyTypePer = this.VerifyTypeCustomer(TypeCustomer.PERSONAL, TYC);
+        Boolean VerifyTypeEmp = this.VerifyTypeCustomer(TypeCustomer.EMPRESARIAL, TYC);
 
         if (VerifyTypePer) {
-            Long VerifyAccounts =
-                this.filterServiceAccount.accountByTypeCustomer(idcustomer, typeaccount);
+            Long VerifyAccounts = this.filterServiceAccount.accountByTypeCustomer(IDC, TYA);
             filter = VerifyAccounts == 1;
         }
         if (VerifyTypeEmp) {
-            Boolean VerifyTypeAccountAh =
-                this.VerifyTypeAccount(TypeAccount.ACCOUNT_SAV, typeaccount);
-            Boolean VerifyTypeAccountCo =
-                this.VerifyTypeAccount(TypeAccount.ACCOUNT_COR, typeaccount);
+            Boolean VerifyTypeAccountAh = this.VerifyTypeAccount(TypeAccount.ACCOUNT_SAV, TYA);
+            Boolean VerifyTypeAccountCo = this.VerifyTypeAccount(TypeAccount.ACCOUNT_COR, TYA);
 
             filter = VerifyTypeAccountAh || VerifyTypeAccountCo;
         }

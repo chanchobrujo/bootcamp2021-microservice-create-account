@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -42,25 +42,23 @@ public class AccountController {
         return Mono.just(ResponseEntity.ok().body(this.ResponseAccounts.findAll()));
     }
 
-    @GetMapping("/{number}")
-    public Mono<ResponseEntity<ResponseAccount>> findByNumber(
-        @PathVariable("number") String number
-    ) {
+    @GetMapping("/findById")
+    public Mono<ResponseEntity<ResponseAccount>> findByNumber(@RequestParam String number) {
         return this.ResponseAccounts.findByNumber(number)
             .map(mapper -> ResponseEntity.ok().body(mapper))
             .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/save/{id}")
+    @PostMapping("/save")
     public Mono<ResponseEntity<Map<String, Object>>> save(
-        @PathVariable("id") String id,
+        @RequestParam String idcustomer,
         @RequestBody @Valid RequestAccount model,
         BindingResult bindinResult
     ) {
         if (bindinResult.hasErrors()) return this.responseBindingResultErrors.BindingResultErrors(
                 bindinResult
             );
-        return this.AccountService.save(id, model)
+        return this.AccountService.save(idcustomer, model)
             .map(
                 response -> {
                     return ResponseEntity.status(response.getStatus()).body(response.getResponse());

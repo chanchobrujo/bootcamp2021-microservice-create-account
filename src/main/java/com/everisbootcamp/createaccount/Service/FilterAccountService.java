@@ -10,14 +10,14 @@ public class FilterAccountService {
     @Autowired
     private AccounRepository repository;
 
-    public Long accountByTypeCustomer(String idcustomer, String typeaccount) {
+    public Long accountByTypeCustomer(String IDC, String TYA) {
         return repository
             .findAll()
             .collectList()
             .block()
             .stream()
-            .filter(a -> a.getIdcustomer().equals(idcustomer))
-            .filter(aa -> aa.getTypeaccount().equals(typeaccount))
+            .filter(a -> a.getIdcustomer().equals(IDC))
+            .filter(aa -> aa.getTypeaccount().equals(TYA))
             .count();
     }
 }
