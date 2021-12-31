@@ -16,6 +16,9 @@ public class ResponseAccounts {
     @Autowired
     private AccounRepository repository;
 
+    @Autowired
+    private RulesService RulesService;
+
     public Flux<ResponseAccount> findAll() {
         List<Account> findAll = this.repository.findAll().toStream().collect(Collectors.toList());
         List<ResponseAccount> CollectionResponse = new ArrayList<ResponseAccount>();
@@ -26,7 +29,7 @@ public class ResponseAccounts {
                 .NumberAccount(account.getNumberaccount())
                 .Amount(account.getAmount())
                 .DateCreated(account.getDatecreated())
-                .Rules(account.getRules())
+                .Rules(this.RulesService.SetPropertiesRules(account.getRules()))
                 .TypeAccount(account.getTypeaccount())
                 .build();
             CollectionResponse.add(responseAccount);
