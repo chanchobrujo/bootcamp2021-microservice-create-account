@@ -13,6 +13,7 @@ import com.everisbootcamp.createaccount.Model.Response.Response;
 import com.everisbootcamp.createaccount.Model.Response.ResponseCustomer;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -83,21 +84,24 @@ public class AccountService {
     }
 
     public Mono<Response> updateBalance(RequestUpdateBalance model) {
-        Response response = new Response();
-
-        try {
-            Account account = repository
-                .findByNumberaccount(model.getNumberaccount())
+        Response response = new Response(MessagesError.NOTFOUND_DATA);
+        Optional<Account> accountM =
+            this.repository.findAll()
+                .toStream()
+                .filter(ac -> ac.getNumberaccount().equals(model.getNumberaccount()))
+                .findFirst();
+        if (accountM.isPresent()) {
+            Account account = accountM
                 .map(
                     mapper -> {
                         mapper.setAmount(model.getBalance());
                         return mapper;
                     }
                 )
-                .block();
+                .get();
             repository.save(account).subscribe();
-        } catch (Exception e) {}
-
+            response = new Response(MessagesSuccess.SUCCESS_REGISTER);
+        }
         return Mono.just(response);
     }
 
