@@ -7,16 +7,15 @@ import com.everisbootcamp.createaccount.Constant.Enums.Messages.MessagesSuccess;
 import com.everisbootcamp.createaccount.Constant.Enums.Types.TypeAccount;
 import com.everisbootcamp.createaccount.Data.Account;
 import com.everisbootcamp.createaccount.Interface.AccounRepository;
-import com.everisbootcamp.createaccount.Model.AccountModel;
-import com.everisbootcamp.createaccount.Model.CustomerModel;
-import com.everisbootcamp.createaccount.Model.Response;
-import com.everisbootcamp.createaccount.Model.updateBalanceModel;
+import com.everisbootcamp.createaccount.Model.Request.RequestAccount;
+import com.everisbootcamp.createaccount.Model.Request.RequestUpdateBalance;
+import com.everisbootcamp.createaccount.Model.Response.Response;
+import com.everisbootcamp.createaccount.Model.Response.ResponseCustomer;
 import java.util.Map;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -34,9 +33,9 @@ public class AccountService {
     @Autowired
     private ConnectionMicroservicesLogic ConnectionMicroservicesLogic;
 
-    public Mono<Response> save(String idcustomer, AccountModel model) {
+    public Mono<Response> save(String idcustomer, RequestAccount model) {
         Response response = new Response();
-        ResponseEntity<CustomerModel> modelCustomer =
+        ResponseEntity<ResponseCustomer> modelCustomer =
             this.ConnectionMicroservicesCustomer.findCustomerById(idcustomer);
 
         Boolean verifyEmptyCustomer = Objects.isNull(modelCustomer.getBody());
@@ -83,7 +82,7 @@ public class AccountService {
         return Mono.just(response);
     }
 
-    public Mono<Response> updateBalance(updateBalanceModel model) {
+    public Mono<Response> updateBalance(RequestUpdateBalance model) {
         Response response = new Response();
 
         try {
@@ -104,9 +103,5 @@ public class AccountService {
 
     public Mono<Account> findByNumber(String number) {
         return repository.findByNumberaccount(number);
-    }
-
-    public Flux<Account> findAll() {
-        return repository.findAll();
     }
 }

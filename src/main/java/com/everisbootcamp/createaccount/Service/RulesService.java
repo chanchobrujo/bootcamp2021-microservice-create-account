@@ -76,4 +76,24 @@ public class RulesService {
 
         return filter;
     }
+
+    public Map<String, Object> SetPropertiesRules(Map<String, Object> rule) {
+        Boolean commissionMaintenance = (Boolean) rule.get(
+            RuleName.COMMISSIONMAINTENANCE.getName()
+        );
+        Boolean maximumLimitMonthlyMovements = (Boolean) rule.get(
+            RuleName.MAXLIMITMOVMONTHLY.getName()
+        );
+
+        rule.put(
+            RuleName.COMMISSIONMAINTENANCE.getName(),
+            Utils.BooleanToString(commissionMaintenance)
+        );
+        rule.put(
+            RuleName.MAXLIMITMOVMONTHLY.getName(),
+            Utils.BooleanToString(maximumLimitMonthlyMovements)
+        );
+
+        return rule;
+    }
 }

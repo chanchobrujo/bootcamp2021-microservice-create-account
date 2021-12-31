@@ -2,9 +2,11 @@ package com.everisbootcamp.createaccount.Controller;
 
 import com.everisbootcamp.createaccount.Data.Account;
 import com.everisbootcamp.createaccount.Error.ResponseBindingResultErrors;
-import com.everisbootcamp.createaccount.Model.AccountModel;
-import com.everisbootcamp.createaccount.Model.updateBalanceModel;
+import com.everisbootcamp.createaccount.Model.Request.RequestAccount;
+import com.everisbootcamp.createaccount.Model.Request.RequestUpdateBalance;
+import com.everisbootcamp.createaccount.Model.Response.ResponseAccount;
 import com.everisbootcamp.createaccount.Service.AccountService;
+import com.everisbootcamp.createaccount.Service.ResponseAccounts;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +26,22 @@ import reactor.core.publisher.Mono;
 public class AccountController {
 
     @Autowired
-    private AccountService service;
+    private AccountService AccountService;
+
+    @Autowired
+    private ResponseAccounts ResponseAccounts;
 
     @Autowired
     private ResponseBindingResultErrors responseBindingResultErrors;
 
     @GetMapping("/")
-    public Mono<ResponseEntity<Flux<Account>>> findByAll() {
-        return Mono.just(ResponseEntity.ok().body(service.findAll()));
+    public Mono<ResponseEntity<Flux<ResponseAccount>>> findByAll() {
+        return Mono.just(ResponseEntity.ok().body(this.ResponseAccounts.findAll()));
     }
 
     @GetMapping("/{number}")
     public Mono<ResponseEntity<Account>> findByNumber(@PathVariable("number") String number) {
-        return service
-            .findByNumber(number)
+        return this.AccountService.findByNumber(number)
             .map(mapper -> ResponseEntity.ok().body(mapper))
             .defaultIfEmpty(ResponseEntity.notFound().build());
     }
@@ -45,14 +49,13 @@ public class AccountController {
     @PostMapping("/save/{id}")
     public Mono<ResponseEntity<Map<String, Object>>> save(
         @PathVariable("id") String id,
-        @RequestBody @Valid AccountModel model,
+        @RequestBody @Valid RequestAccount model,
         BindingResult bindinResult
     ) {
         if (bindinResult.hasErrors()) return this.responseBindingResultErrors.BindingResultErrors(
                 bindinResult
             );
-        return service
-            .save(id, model)
+        return this.AccountService.save(id, model)
             .map(
                 response -> {
                     return ResponseEntity.status(response.getStatus()).body(response.getResponse());
@@ -63,14 +66,13 @@ public class AccountController {
 
     @PostMapping("/updateBalance")
     public Mono<ResponseEntity<Map<String, Object>>> updateBalance(
-        @RequestBody updateBalanceModel model,
+        @RequestBody RequestUpdateBalance model,
         BindingResult bindinResult
     ) {
         if (bindinResult.hasErrors()) return this.responseBindingResultErrors.BindingResultErrors(
                 bindinResult
             );
-        return service
-            .updateBalance(model)
+        return this.AccountService.updateBalance(model)
             .map(
                 response -> {
                     return ResponseEntity.status(response.getStatus()).body(response.getResponse());
