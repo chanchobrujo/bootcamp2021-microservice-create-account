@@ -1,12 +1,12 @@
 package com.everisbootcamp.createaccount.Controller;
 
-import com.everisbootcamp.createaccount.Data.Account;
 import com.everisbootcamp.createaccount.Error.ResponseBindingResultErrors;
 import com.everisbootcamp.createaccount.Model.Request.RequestAccount;
 import com.everisbootcamp.createaccount.Model.Request.RequestUpdateBalance;
 import com.everisbootcamp.createaccount.Model.Response.ResponseAccount;
-import com.everisbootcamp.createaccount.Service.AccountService;
-import com.everisbootcamp.createaccount.Service.ResponseAccounts;
+import com.everisbootcamp.createaccount.Service.ResponseAccountsService;
+import com.everisbootcamp.createaccount.Service.SaveAccountService;
+import com.everisbootcamp.createaccount.Service.UpdateBalanceService;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +26,13 @@ import reactor.core.publisher.Mono;
 public class AccountController {
 
     @Autowired
-    private AccountService AccountService;
+    private SaveAccountService AccountService;
 
     @Autowired
-    private ResponseAccounts ResponseAccounts;
+    private UpdateBalanceService UpdateBalanceService;
+
+    @Autowired
+    private ResponseAccountsService ResponseAccounts;
 
     @Autowired
     private ResponseBindingResultErrors responseBindingResultErrors;
@@ -40,8 +43,10 @@ public class AccountController {
     }
 
     @GetMapping("/{number}")
-    public Mono<ResponseEntity<Account>> findByNumber(@PathVariable("number") String number) {
-        return this.AccountService.findByNumber(number)
+    public Mono<ResponseEntity<ResponseAccount>> findByNumber(
+        @PathVariable("number") String number
+    ) {
+        return this.ResponseAccounts.findByNumber(number)
             .map(mapper -> ResponseEntity.ok().body(mapper))
             .defaultIfEmpty(ResponseEntity.notFound().build());
     }
@@ -72,7 +77,7 @@ public class AccountController {
         if (bindinResult.hasErrors()) return this.responseBindingResultErrors.BindingResultErrors(
                 bindinResult
             );
-        return this.AccountService.updateBalance(model)
+        return this.UpdateBalanceService.updateBalance(model)
             .map(
                 response -> {
                     return ResponseEntity.status(response.getStatus()).body(response.getResponse());

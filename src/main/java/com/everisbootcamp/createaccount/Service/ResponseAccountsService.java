@@ -9,15 +9,16 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
-public class ResponseAccounts {
+public class ResponseAccountsService {
 
     @Autowired
     private AccounRepository repository;
 
     @Autowired
-    private RulesService RulesService;
+    private DefineRulesService RulesService;
 
     public Flux<ResponseAccount> findAll() {
         List<Account> findAll = this.repository.findAll().toStream().collect(Collectors.toList());
@@ -35,5 +36,15 @@ public class ResponseAccounts {
             CollectionResponse.add(responseAccount);
         }
         return Flux.fromIterable(CollectionResponse);
+    }
+
+    public Mono<ResponseAccount> findByNumber(String number) {
+        return Mono.just(
+            this.findAll()
+                .toStream()
+                .filter(ac -> ac.getNumberAccount().equals(number))
+                .findFirst()
+                .get()
+        );
     }
 }
