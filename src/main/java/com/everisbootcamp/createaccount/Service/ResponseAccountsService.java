@@ -1,5 +1,6 @@
 package com.everisbootcamp.createaccount.Service;
 
+import com.everisbootcamp.createaccount.Common.Utils;
 import com.everisbootcamp.createaccount.Data.Account;
 import com.everisbootcamp.createaccount.Interface.AccounRepository;
 import com.everisbootcamp.createaccount.Model.Response.ResponseAccount;
@@ -29,7 +30,7 @@ public class ResponseAccountsService {
                 .builder()
                 .NumberAccount(account.getNumberaccount())
                 .Amount(account.getAmount())
-                .DateCreated(account.getDatecreated())
+                .DateCreated(Utils.date())
                 .Rules(this.RulesService.SetPropertiesRules(account.getRules()))
                 .TypeAccount(account.getTypeaccount())
                 .build();

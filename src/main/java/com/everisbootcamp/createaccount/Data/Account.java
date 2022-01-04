@@ -1,8 +1,6 @@
 package com.everisbootcamp.createaccount.Data;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,7 +32,7 @@ public class Account {
     private Map<String, Object> rules;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    private LocalDateTime datecreated = LocalDateTime.now(ZoneId.of("America/Lima"));
+    private String datecreated;
 
     public Account(String idcustomer, String typeaccount, Double amount) {
         this.idcustomer = idcustomer;
