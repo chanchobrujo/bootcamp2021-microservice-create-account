@@ -1,6 +1,5 @@
 package com.everisbootcamp.createaccount.Model.Response;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,5 +20,5 @@ public class ResponseAccount {
 
     private Map<String, Object> Rules;
 
-    private LocalDateTime DateCreated;
+    private String DateCreated;
 }

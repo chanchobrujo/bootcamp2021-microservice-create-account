@@ -1,5 +1,6 @@
 package com.everisbootcamp.createaccount.Service;
 
+import com.everisbootcamp.createaccount.Common.Utils;
 import com.everisbootcamp.createaccount.Connection.ConnectionMicroservicesCustomer;
 import com.everisbootcamp.createaccount.Connection.ConnectionMicroservicesLogic;
 import com.everisbootcamp.createaccount.Constant.Enums.Messages.MessagesError;
@@ -62,6 +63,7 @@ public class SaveAccountService {
                     .numberaccount(numberaccount)
                     .idcustomer(IDC)
                     .typeaccount(TYA)
+                    .datecreated(Utils.date())
                     .amount(0.0)
                     .build();
 
