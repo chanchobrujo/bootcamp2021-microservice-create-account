@@ -139,4 +139,18 @@ public class Utils {
     public static Integer getMonth(String stringDate) throws ParseException {
         return StringToCalendar(stringDate).get(Calendar.MONTH);
     }
+
+    /**
+     * Concatena strings con signo '+'
+     *
+     * @param String
+     * @return String
+     */
+    public static String addStrings(String... values) {
+        String x = Constan.EMPTY;
+        for (String string : values) {
+            x = string.concat(Constan.PLUS).concat(x);
+        }
+        return x;
+    }
 }
