@@ -33,7 +33,8 @@ public class ResponseAccountsService {
         String ND = customer.getNumberdocument();
         String NC = customer.getNamecustomer();
         String LC = customer.getLastnamecustomer();
-        return Utils.addStrings(DT, ND, NC, LC);
+        String value = Utils.addStrings(LC, NC, ND, DT);
+        return value.substring(0, value.length() - 1);
     }
 
     public Flux<ResponseAccount> findAll() {
@@ -46,7 +47,7 @@ public class ResponseAccountsService {
                 .NumberAccount(account.getNumberaccount())
                 .Amount(account.getAmount())
                 .customer(this.findCustomer(account.getIdcustomer()))
-                .DateCreated(Utils.date())
+                .DateCreated(account.getDatecreated())
                 .Rules(this.RulesService.SetPropertiesRules(account.getRules()))
                 .TypeAccount(account.getTypeaccount())
                 .build();
