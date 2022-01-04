@@ -24,12 +24,16 @@ public class ResponseAccountsService {
     private DefineRulesService RulesService;
 
     @Autowired
-    private ConnectionMicroservicesCustomer ConnectionMicroservicesCustomer;
+    private ConnectionMicroservicesCustomer CMC;
 
     private String findCustomer(String id) {
-        ResponseCustomer customer =
-            this.ConnectionMicroservicesCustomer.findCustomerById(id).getBody();
-        return Utils.addStrings(customer.getNamecustomer(), customer.getLastnamecustomer());
+        ResponseCustomer customer = this.CMC.findCustomerById(id).getBody();
+
+        String DT = customer.getDocumentType();
+        String ND = customer.getNumberdocument();
+        String NC = customer.getNamecustomer();
+        String LC = customer.getLastnamecustomer();
+        return Utils.addStrings(DT, ND, NC, LC);
     }
 
     public Flux<ResponseAccount> findAll() {
