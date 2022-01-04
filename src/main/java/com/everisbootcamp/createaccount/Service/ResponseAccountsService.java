@@ -1,9 +1,11 @@
 package com.everisbootcamp.createaccount.Service;
 
 import com.everisbootcamp.createaccount.Common.Utils;
+import com.everisbootcamp.createaccount.Connection.ConnectionMicroservicesCustomer;
 import com.everisbootcamp.createaccount.Data.Account;
 import com.everisbootcamp.createaccount.Interface.AccounRepository;
 import com.everisbootcamp.createaccount.Model.Response.ResponseAccount;
+import com.everisbootcamp.createaccount.Model.Response.ResponseCustomer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +23,15 @@ public class ResponseAccountsService {
     @Autowired
     private DefineRulesService RulesService;
 
+    @Autowired
+    private ConnectionMicroservicesCustomer ConnectionMicroservicesCustomer;
+
+    private String findCustomer(String id) {
+        ResponseCustomer customer =
+            this.ConnectionMicroservicesCustomer.findCustomerById(id).getBody();
+        return Utils.addStrings(customer.getNamecustomer(), customer.getLastnamecustomer());
+    }
+
     public Flux<ResponseAccount> findAll() {
         List<Account> findAll = this.repository.findAll().toStream().collect(Collectors.toList());
         List<ResponseAccount> CollectionResponse = new ArrayList<ResponseAccount>();
@@ -30,6 +41,7 @@ public class ResponseAccountsService {
                 .builder()
                 .NumberAccount(account.getNumberaccount())
                 .Amount(account.getAmount())
+                .customer(this.findCustomer(account.getIdcustomer()))
                 .DateCreated(Utils.date())
                 .Rules(this.RulesService.SetPropertiesRules(account.getRules()))
                 .TypeAccount(account.getTypeaccount())
